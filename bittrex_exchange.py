@@ -1,5 +1,5 @@
 from bittrex import Bittrex
-import csv
+import numpy as np
 import time
 import requests
 import logging
@@ -7,11 +7,12 @@ import traceback
 import os
 import h5py
 
-class Bittrex_wrapper(Bittrex):
+
+class Bittrex_wrapper:
     '''adapted API functions'''
 
     def __init__(self, logname="bittrex.log"):
-        logging.basicConfig(filename=logname, encoding='utf-8', level=logging.DEBUG)
+        logging.basicConfig(filename=logname, level=logging.DEBUG)
         self.__API_KEY = ""
         self.__API_SECRET = ""
         self.prices = {}
@@ -25,8 +26,8 @@ class Bittrex_wrapper(Bittrex):
             print i
         print "for changes: edit self.ignore list in Exchange class \n"
         '''
-        logging.info("not monitoring/trading following pairs:", str(self.ignore))
-
+        logging.info(f"running a new session, time: {time.ctime()}")
+        logging.info(f"not monitoring/trading following pairs: {str(self.ignore)}")
         '''read API keys'''
         try:
             file = open('keys/bittrex_key.txt', 'r')
@@ -55,13 +56,13 @@ class Bittrex_wrapper(Bittrex):
                 pass
         print("ok --")
         print("checking BTC wallet")
-        btc_amount = self.get_balance('BTC')['result']['Available']
+        btc_amount = my_bittrex.get_balance('BTC')['result']['Available']
         print("ok... {} BTC available to trade".format(btc_amount))
         logging.info(
-            "starting trading with {} BTC available, monitoring {} "
-            "currency pairs on BITTREX".format(btc_amount, len(self.prices) - 2),
-            '')
+            f"starting trading with {btc_amount} BTC available, monitoring {len(self.prices) - 2} "
+            "currency pairs on BITTREX")
         print("starting logging/trading")
+        self.load_data()
         return True, btc_amount
 
     def load_data(self):
@@ -74,18 +75,18 @@ class Bittrex_wrapper(Bittrex):
                     markets[k] = list(temp_markets[k])
                 self.prices = markets
             except Exception as e:
-                logging.error('[ERROR] reading h5 file... populating dic', e)
+                logging.error(f'[ERROR] reading h5 file... populating dic {e}')
                 self.populate()
         else:
             print("no h5 file found... populating dictionary...")
-            logging.warning('[ERROR] reading h5 file... populating dic', e)
+            logging.warning('[ERROR] reading h5 file... populating dic')
             self.populate()
 
     def populate(self):
         """Populate prices dictionary with markets trading on Bittrex"""
 
         endpoint = "https://bittrex.com/api/v1.1/public/getmarketsummaries"
-        self.prices = {'TIME': [time.time()], 'GLOBAL': [self.get_global()]}
+        self.prices = {'TIME': [time.time()]}
 
         try:
             markets = requests.get(endpoint).json()["result"]
@@ -131,7 +132,6 @@ class Bittrex_wrapper(Bittrex):
 
     def get_prices(self):
         """updates prices dictionary with markets trading on Bittrex"""
-        # self.MAX_MEM = 7*60*60*24
         if len(self.prices['TIME']) > self.MAX_MEM:
             ''' to prevent data/memory overflow '''
             shorten = True
@@ -152,9 +152,7 @@ class Bittrex_wrapper(Bittrex):
                     self.prices[symbol].append((bid, ask, vol))
             if shorten:
                 self.prices['TIME'] = self.prices['TIME'][-self.MAX_MEM:]
-                self.prices['GLOBAL'] = self.prices['GLOBAL'][-self.MAX_MEM:]
             self.prices['TIME'].append(time.time())
-            self.prices['GLOBAL'].append(self.get_global())
             # only main and 0 threads are allowed to write to the file (avoid collisions)
             logging.info("deleting old, creating new old file")
             os.system(" rm -f bittrex_data_h5_old.h5 ")
@@ -166,7 +164,7 @@ class Bittrex_wrapper(Bittrex):
 
         except Exception as e:
             print('Failed to get markets from', e)
-            logging.warning("prices update failed", e)
+            logging.warning(f"prices update failed {e}")
             time.sleep(30)
             return self.prices
 
@@ -233,3 +231,10 @@ class Bittrex_wrapper(Bittrex):
             else:
                 logging.error('ERROR: SELL ORDER FAILED: {}'.format(pair), ret)
                 return False
+
+
+if __name__ == "__main__":
+    bittrex_exchange = Bittrex_wrapper()
+    bittrex_exchange.initial_setup()
+    bittrex_exchange.get_prices()
+    print(bittrex_exchange.prices)
