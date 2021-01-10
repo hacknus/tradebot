@@ -1,0 +1,4 @@
+h5py~=3.1.0
+numpy~=1.19.5
+requests~=2.25.1
+python-bittrex~=0.3.0
