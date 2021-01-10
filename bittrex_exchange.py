@@ -174,7 +174,7 @@ class Bittrex_wrapper:
         while True:
             self.wallet = my_bittrex.get_balance('BTC')
             price = self.get_price(pair)[1]
-            btc_amount = wallet['result']['Available']
+            btc_amount = self.wallet['result']['Available']
             if btc_amount > self.stake:
                 btc_amount = self.stake
             else:
@@ -208,10 +208,10 @@ class Bittrex_wrapper:
             wallet = my_bittrex.get_balance(pair.replace('BTC-', ''))
             price = self.get_price(pair)[0]
             coin_amount = wallet['result']['Available']
-            ret = my_bittrex.sell_limit(pair, COIN_AMOUNT, price)
+            ret = my_bittrex.sell_limit(pair, coin_amount, price)
             if str(ret['success']) == 'True':
                 logging.info(
-                    "SELLING {} {} for {} BTC".format(COIN_AMOUNT, pair.replace('BTC-', ''), COIN_AMOUNT * price),
+                    "SELLING {} {} for {} BTC".format(coin_amount, pair.replace('BTC-', ''), coin_amount * price),
                     ret)
                 UUID = str(ret['result']['uuid'])
                 time.sleep(2)
