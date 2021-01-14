@@ -1,7 +1,7 @@
-from bittrex_exchange import Bittrex_wrapper as BTRX
+from bittrex_exchange import BittrexWrapper as BTRX
 
 
-class Bittrex_wrapper(BTRX):
+class BittrexWrapper(BTRX):
     def __init__self(self):
         # wrapper for Bittrex exchange
         self.drop = False
@@ -10,7 +10,7 @@ class Bittrex_wrapper(BTRX):
         self.last_price = 0
 
 
-class Coinbase_wrapper:
+class CoinbaseWrapper:
     def __init__(self):
         # dummy wrapper
         self.drop = False
@@ -25,7 +25,7 @@ class Coinbase_wrapper:
         pass
 
 
-class Bitfinex_wrapper:
+class BitfinexWrapper:
     def __init__(self):
         # dummy wrapper
         self.drop = False
@@ -40,7 +40,7 @@ class Bitfinex_wrapper:
         pass
 
 
-class Binance_wrapper:
+class BinanceWrapper:
     def __init__(self):
         # dummy wrapper
         self.drop = False
