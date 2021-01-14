@@ -1,7 +1,7 @@
 # python crypto tradebot
 A tradebot for cryptocurrencies.
 pybotMC.py spawns multiple threads, each monitoring an altcoin on Bittrex. buy and sell are described by the
-sell_condition and buy_condition functions.
+sell_condition and buy_condition functions. (<b>attention</b> this is old, outdated code, please refer to the bittrex_exchange.py for an interface to bittrex, it's a handler for the python-bittrex library)
 API keys should be stored in the /keys folder, which is ignored by git, such that they will never be made public.
 Example: 
 ./keys/bittrex_key.txt
