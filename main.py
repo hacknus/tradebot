@@ -17,7 +17,7 @@ def sell_condition(mavs):
         return False
 
 
-def main(profit=1.1):
+def main(profit=1.1, max_loss=0.8):
     mav5 = MAV(5)
     mav8 = MAV(8)
     mav13 = MAV(13)
@@ -25,7 +25,7 @@ def main(profit=1.1):
 
     mavs = [mav5, mav8, mav13, mav21]
 
-    BTC = Coin()
+    btc = Coin()
 
     exchange = BittrexWrapper()
 
@@ -33,14 +33,14 @@ def main(profit=1.1):
         buy, sell = exchange.get_price('BTC-USD')
         Coin.update(buy, sell)
 
-        if BTC.last_buy != 0:
+        if btc.last_buy != 0:
             if buy_condition(mavs):
                 if exchange.buy('BTC-USD'):
-                    BTC.buy(buy)
+                    btc.buy(buy)
         else:
-            if sell_condition(mavs) or sell > profit * BTC.last_buy:
+            if sell_condition(mavs) or sell > profit * btc.last_buy or sell < max_loss * btc.last_buy:
                 if exchange.sell('BTC-USD'):
-                    BTC.sell()
+                    btc.sell()
 
 
 if __name__ == "__main__":
