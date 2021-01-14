@@ -17,7 +17,7 @@ class MAV:
         but only the last three entries
         for memory saving purposes
         '''
-        if price == None:
+        if price is None:
             self.upper_band = [np.nan, np.nan, np.nan]
             self.lower_band = [np.nan, np.nan, np.nan]
             self.mav = [np.nan, np.nan, np.nan]

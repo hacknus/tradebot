@@ -32,6 +32,8 @@ def main(profit=1.1, max_loss=0.8):
     while True:
         buy, sell = exchange.get_price('BTC-USD')
         Coin.update(buy, sell)
+        for mav in mavs:
+            mav.add([buy, sell])
 
         if btc.last_buy != 0:
             if buy_condition(mavs):
