@@ -11,7 +11,7 @@ import h5py
 class BittrexWrapper:
     '''adapted API functions'''
 
-    def __init__(self, logname="bittrex.log"):
+    def __init__(self, logname="bittrex.log", test=False):
         logging.basicConfig(filename=logname, level=logging.DEBUG)
         self.__API_KEY = ""
         self.__API_SECRET = ""
