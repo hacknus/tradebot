@@ -5,12 +5,15 @@ sell_condition and buy_condition functions. (<b>attention</b> this is old, outda
 API keys should be stored in the /keys folder, which is ignored by git, such that they will never be made public.
 Example: 
 ./keys/bittrex_key.txt
-should cointain the API key and API secret (two lines)
+should cointain the API key and API secret (two lines)<br/><br/>
 
-
-## method 1:
-create a test-set for training, to test buy and sell conditions for altcoins (peak detections) in order to get reliable (>50%) success rate on
-
-## method 2:
-implement more exchanges and compare them (pattern recognition). if one exchange is trailing behind another one, buy and sell based on the leading exchange in order to make a profit.
-Note: this method is a lot less longterm because exchange-behaviour may likely change in the future.
+python-bittrex library can be used to access bittrex exchange.<br/>
+bittrex_exchange.py is a wrapper for this library <br/>
+compare_bot.py is a template to compare the bitcoin prices on different exchanges <br/>
+TestFramework.py should be the test framework where one can train/observe the bot with old data <br/>
+<br/>
+coin.py is a cointainer class for a currency <br/>
+mav.py is a moving average class - could be replaced by pandas <br/>
+plot.py shows the data <br/>
+<br/>
+old data is not included in the git (size) but can be downloaded from http://www.cryptodatadownload.com
