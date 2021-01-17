@@ -235,7 +235,7 @@ class BittrexWrapper:
 
 
 if __name__ == "__main__":
-    bittrex_exchange = Bittrex_wrapper()
+    bittrex_exchange = BittrexWrapper()
     bittrex_exchange.initial_setup()
     bittrex_exchange.get_prices()
     print(bittrex_exchange.prices)
